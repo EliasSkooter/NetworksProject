@@ -1,2 +1,2 @@
-# NetworksServer
+# NetworksProject
 server for the project
