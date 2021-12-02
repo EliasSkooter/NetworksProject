@@ -31,7 +31,6 @@ public class Server {
                 thread.start();
 
             } catch (Exception e) {
-                System.out.println("are we here????");
                 clientSocket.close();
                 e.printStackTrace();
             }
@@ -65,7 +64,18 @@ class ClientHandler extends Thread {
                 // Receive the answer from Client
                 received = inputFromClient.readUTF();
 
-                System.out.println("????" + received);
+                System.out.println(received);
+
+                Scanner scan = new Scanner(inputFromClient);
+                String fileName = scan.nextLine();
+                int fileSize = scan.nextInt();
+                FileOutputStream fos = new FileOutputStream(fileName);
+                BufferedOutputStream bos = new BufferedOutputStream(fos);
+                byte[] byteArr = new byte[fileSize];
+                int file = inputFromClient.read(byteArr,0,byteArr.length);
+                bos.write(byteArr,0,file);
+                System.out.println("Incoming file: "+fileName);
+                System.out.println("Size: "+ fileSize+"Byte");
 
                 // GET REQUEST ON localhost:6969/login
 
@@ -104,7 +114,7 @@ class ClientHandler extends Thread {
                         break;
                 }
             } catch (IOException e) {
-//                e.printStackTrace();
+                e.printStackTrace();
                 try {
                     this.clientSocket.close();
                     System.out.println("Connection closed.");
