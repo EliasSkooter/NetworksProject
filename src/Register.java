@@ -108,9 +108,18 @@ public class Register extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
                     System.out.println(vacCer);
+                    c.sendMessageToServer("reg");
 
-                    c.sendFileToServer(vacCer);
 
+                    c.sendMessageToServer(tfName.getText());
+//                    c.sendImageToServer(image);
+                    c.sendMessageToServer(tfEmail.getText());
+                    c.sendMessageToServer(tfUsername.getText());
+                    c.sendMessageToServer(new String(tfPassword.getPassword()));
+                    c.getOutputToServer().writeBoolean(vaccinationCheck.isSelected());
+                    if(vaccinationCheck.isSelected()==true) {
+                        c.sendFileToServer(vacCer);
+                    }
 //                      c.sendImageToServer(image);
                 } catch (IOException ex) {
                     ex.printStackTrace();

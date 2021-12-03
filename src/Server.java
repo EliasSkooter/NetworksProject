@@ -56,58 +56,70 @@ class ClientHandler extends Thread {
     @Override
     public void run() {
         // Variables
-        String received;
         String toreturn;
         while (true) {
             try {
                 // Initiate communication with Client
-                outputToClient.writeUTF("What do you want?[Date | Time]..\n" + "Type Exit to terminate connection.");
+//                outputToClient.writeUTF("What do you want?[Date | Time]..\n" + "Type Exit to terminate connection.");
 
                 // Receive the answer from Client
-//              received = inputFromClient.readUTF();
-                received = "biz";
+
 
 //                System.out.println(received);
-                receiveFile();
-//                recieveImage();
+
+                if(inputFromClient.readUTF().equals("reg")) {
 
 
+                    System.out.println(inputFromClient.readUTF());
+//                    recieveImage();
+                    System.out.println(inputFromClient.readUTF());
+                    System.out.println(inputFromClient.readUTF());
+                    System.out.println(inputFromClient.readUTF());
+                    boolean vc = inputFromClient.readBoolean();
+                    System.out.println(vc);
+                    if(vc == true)
+                    receiveFile();
+                }
+                else if (inputFromClient.readUTF().equals("log")){
+                    System.out.println(inputFromClient.readUTF());
+                    System.out.println(inputFromClient.readUTF());
+                }
                 // GET REQUEST ON localhost:6969/login
 
                 // Receiving Exit closes the connection and breaks the loop
-                if (received.equals("Exit")) {
-                    System.out.println("-----------------------------------------------------------------------------------");
-                    System.out.println("Client " + this.clientSocket + " sends exit...");
-                    System.out.println("Closing this connection.");
-                    this.clientSocket.close();
-                    System.out.println("Connection closed");
-                    break;
-                }
+//                if (received.equals("Exit")) {
+//                    System.out.println("-----------------------------------------------------------------------------------");
+//                    System.out.println("Client " + this.clientSocket + " sends exit...");
+//                    System.out.println("Closing this connection.");
+//                    this.clientSocket.close();
+//                    System.out.println("Connection closed");
+//                    break;
+//                }
 
                 // Creating and formatting Date object
-                Date date = new Date();
-                DateFormat fordate = new SimpleDateFormat("yyyy/MM/dd");
-                DateFormat fortime = new SimpleDateFormat("hh:mm:ss");
+//                Date date = new Date();
+//                DateFormat fordate = new SimpleDateFormat("yyyy/MM/dd");
+//                DateFormat fortime = new SimpleDateFormat("hh:mm:ss");
 
                 // Send to Client what is requested
-                switch (received) {
-
-                    case "Date":
-                        toreturn = fordate.format(date);
-                        outputToClient.writeUTF(toreturn);
-                        System.out.println("Sent date to client.");
-                        break;
-
-                    case "Time":
-                        toreturn = fortime.format(date);
-                        outputToClient.writeUTF(toreturn);
-                        System.out.println("Sent Time to client.");
-                        break;
-
-                    default:
-                        outputToClient.writeUTF("Invalid input");
-                        break;
-                }
+//                switch (received) {
+//
+//                    case "Date":
+//                        toreturn = fordate.format(date);
+//                        outputToClient.writeUTF(toreturn);
+//                        System.out.println("Sent date to client.");
+//                        break;
+//
+//                    case "Time":
+//                        toreturn = fortime.format(date);
+//                        outputToClient.writeUTF(toreturn);
+//                        System.out.println("Sent Time to client.");
+//                        break;
+//
+//                    default:
+//                        outputToClient.writeUTF("Invalid input");
+//                        break;
+//                }
             } catch (IOException e) {
                 e.printStackTrace();
                 try {
@@ -142,7 +154,8 @@ class ClientHandler extends Thread {
                 output.write(buffer, 0, bytesRead);
                 size -= bytesRead;
             }
-
+//            File f = new File(fileName);
+//            System.out.println(f.getAbsolutePath());
             output.close();
 //            clientData.close();
 

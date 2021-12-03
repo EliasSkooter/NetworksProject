@@ -150,7 +150,7 @@ public class Client {
             outputToServer.writeLong(mybytearray.length);
             outputToServer.write(mybytearray,0,mybytearray.length);
             outputToServer.flush();
-            System.out.println("File "+fileName+" sent to client.");
+            System.out.println("File "+fileName+" sent to server.");
 
             //this.outputToServer.writeUTF(f);
 //           socket.close();
