@@ -2,6 +2,7 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 import java.net.*;
+import java.sql.*;
 
 public class Server {
     public static void main(String[] args) throws IOException {
@@ -55,6 +56,7 @@ class ClientHandler extends Thread {
     public void run() {
         // Variables
         String received;
+        String recieve2;
         String toreturn;
         while (true) {
             try {
@@ -63,8 +65,37 @@ class ClientHandler extends Thread {
 
                 // Receive the answer from Client
                 received = inputFromClient.readUTF();
+                recieve2 = inputFromClient.readUTF();
 
-                System.out.println(received);
+                String myDriver = "com.mysql.cj.jdbc.Driver";
+                String myUrl = "jdbc:mysql://localhost/networksdb";
+                Class.forName(myDriver);
+                Connection conn = DriverManager.getConnection(myUrl, "root", "");
+                String query = "SELECT * FROM users";
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                while (rs.next())
+                {
+                    String username = rs.getString("username");
+                    String password = rs.getString("password");
+
+                    if (username.equals(received) && password.equals(recieve2)) {
+
+                        int id = rs.getInt("id");
+                        String full_name = rs.getString("full_name");
+                        String photo = rs.getString("photo");
+                        String email = rs.getString("email");
+                        String vaccination = rs.getString("vaccination_status");
+                        System.out.println("Welcome: " + username);
+                        System.out.println("your vaccination status: " + vaccination);
+                        //System.out.print(id + ", " + full_name + ", " + photo + ", " + email + ", " + username + ", " + vaccination);
+                    }
+                    else{
+                        System.out.print("authentication failed");
+                    }
+                }
+                st.close();
+
 
                 Scanner scan = new Scanner(inputFromClient);
                 String fileName = scan.nextLine();
@@ -90,7 +121,7 @@ class ClientHandler extends Thread {
                 }
 
                 // Creating and formatting Date object
-                Date date = new Date();
+               /* Date date = new Date();
                 DateFormat fordate = new SimpleDateFormat("yyyy/MM/dd");
                 DateFormat fortime = new SimpleDateFormat("hh:mm:ss");
 
@@ -112,9 +143,11 @@ class ClientHandler extends Thread {
                     default:
                         outputToClient.writeUTF("Invalid input");
                         break;
-                }
-            } catch (IOException e) {
+                }*/
+            } catch (IOException | SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
+                System.err.println("Got an exception! ");
+                System.err.println(e.getMessage());
                 try {
                     this.clientSocket.close();
                     System.out.println("Connection closed.");
