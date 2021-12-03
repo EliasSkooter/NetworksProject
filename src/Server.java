@@ -1,3 +1,5 @@
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.*;
 import java.util.*;
@@ -62,20 +64,13 @@ class ClientHandler extends Thread {
                 outputToClient.writeUTF("What do you want?[Date | Time]..\n" + "Type Exit to terminate connection.");
 
                 // Receive the answer from Client
-                received = inputFromClient.readUTF();
+//              received = inputFromClient.readUTF();
+                received = "biz";
 
-                System.out.println(received);
+//                System.out.println(received);
+                receiveFile();
+//                recieveImage();
 
-                Scanner scan = new Scanner(inputFromClient);
-                String fileName = scan.nextLine();
-                int fileSize = scan.nextInt();
-                FileOutputStream fos = new FileOutputStream(fileName);
-                BufferedOutputStream bos = new BufferedOutputStream(fos);
-                byte[] byteArr = new byte[fileSize];
-                int file = inputFromClient.read(byteArr,0,byteArr.length);
-                bos.write(byteArr,0,file);
-                System.out.println("Incoming file: "+fileName);
-                System.out.println("Size: "+ fileSize+"Byte");
 
                 // GET REQUEST ON localhost:6969/login
 
@@ -132,5 +127,36 @@ class ClientHandler extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void receiveFile() {
+        try {
+            int bytesRead;
+
+            DataInputStream clientData = new DataInputStream(clientSocket.getInputStream());
+
+            String fileName = clientData.readUTF();
+            OutputStream output = new FileOutputStream(fileName);
+            long size = clientData.readLong();
+            byte[] buffer = new byte[1024];
+            while (size > 0 && (bytesRead = clientData.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
+                output.write(buffer, 0, bytesRead);
+                size -= bytesRead;
+            }
+
+            output.close();
+//            clientData.close();
+
+            System.out.println("File "+fileName+" received from client.");
+        } catch (IOException ex) {
+            System.err.println("Client error. Connection closed.");
+        }
+    }
+    public void recieveImage() throws IOException {
+        InputStream clientData = new DataInputStream(clientSocket.getInputStream());
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(clientData);
+        BufferedImage bufferedImage = ImageIO.read(bufferedInputStream);
+//        bufferedInputStream.close();
+        File outputFile = new File("image.jpg");
+        ImageIO.write(bufferedImage, "jpg", outputFile);
     }
 }
