@@ -1,3 +1,5 @@
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.*;
 import java.util.*;
@@ -5,9 +7,14 @@ import java.net.*;
 import java.sql.*;
 
 public class Server {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
         // Server is listening on port 5056
         ServerSocket serverSocket = new ServerSocket(6969);
+        String myDriver = "com.mysql.cj.jdbc.Driver";
+        String myUrl = "jdbc:mysql://localhost/networksdb";
+        Class.forName(myDriver);
+        Connection conn = DriverManager.getConnection(myUrl, "root", "");
+        System.out.println("Database connection successful");
 
         // Server keeps on receiving new Clients
         while (true) {
@@ -28,7 +35,7 @@ public class Server {
                 System.out.println("-----------------------------------------------------------------------------------");
 
                 // Create a new Thread object for the Client
-                Thread thread = new ClientHandler(clientSocket, inputFromClient, outputToClient);
+                Thread thread = new ClientHandler(clientSocket, inputFromClient, outputToClient, conn);
                 thread.start();
 
             } catch (Exception e) {
@@ -44,12 +51,14 @@ class ClientHandler extends Thread {
     final Socket clientSocket;
     final DataInputStream inputFromClient;
     final DataOutputStream outputToClient;
+    final Connection conn;
 
     // Constructor
-    public ClientHandler(Socket clientSocket, DataInputStream inputFromClient, DataOutputStream outputToClient) {
+    public ClientHandler(Socket clientSocket, DataInputStream inputFromClient, DataOutputStream outputToClient, Connection conn) {
         this.clientSocket = clientSocket;
         this.inputFromClient = inputFromClient;
         this.outputToClient = outputToClient;
+        this.conn = conn;
     }
 
     @Override
@@ -67,10 +76,6 @@ class ClientHandler extends Thread {
                 received = inputFromClient.readUTF();
                 recieve2 = inputFromClient.readUTF();
 
-                String myDriver = "com.mysql.cj.jdbc.Driver";
-                String myUrl = "jdbc:mysql://localhost/networksdb";
-                Class.forName(myDriver);
-                Connection conn = DriverManager.getConnection(myUrl, "root", "");
                 String query = "SELECT * FROM users";
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery(query);
@@ -174,7 +179,7 @@ class ClientHandler extends Thread {
                         outputToClient.writeUTF("Invalid input");
                         break;
                 }*/
-            } catch (IOException | SQLException | ClassNotFoundException e) {
+            } catch (IOException | SQLException e) {
                 e.printStackTrace();
                 System.err.println("Got an exception! ");
                 System.err.println(e.getMessage());
