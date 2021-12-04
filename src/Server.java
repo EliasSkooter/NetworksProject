@@ -74,8 +74,9 @@ class ClientHandler extends Thread {
 
 
 //                System.out.println(received);
+                String clientInputType = inputFromClient.readUTF();
 
-                if(inputFromClient.readUTF().equals("reg")) {
+                if(clientInputType.equals("reg")) {
 
 
                     System.out.println(inputFromClient.readUTF());
@@ -89,7 +90,7 @@ class ClientHandler extends Thread {
                     if(vc == true)
                         System.out.println(receiveFile().getAbsolutePath());
                 }
-                else if (inputFromClient.readUTF().equals("log")){
+                else if (clientInputType.equals("log")){
                     String received = inputFromClient.readUTF();
                     String recieve2 = inputFromClient.readUTF();
 
@@ -114,7 +115,7 @@ class ClientHandler extends Thread {
                             //System.out.print(id + ", " + full_name + ", " + photo + ", " + email + ", " + username + ", " + vaccination);
                         }
                         else{
-                            System.out.print("authentication failed");
+                            System.out.println("authentication failed");
                         }
                     }
                     st.close();
@@ -220,7 +221,6 @@ class ClientHandler extends Thread {
 
             output.close();
 //            clientData.close();
-//            System.out.println("File "+fileName+" received from client.");
 
         } catch (IOException ex) {
             System.err.println("Client error. Connection closed.");
