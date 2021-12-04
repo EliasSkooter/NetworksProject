@@ -23,6 +23,10 @@ public class Login extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+
+
+                   // c.sendMessageToServer("log");
+
                     c.sendMessageToServer(tfUsername.getText());
                     c.sendMessageToServer(new String(tfPassword.getPassword()));
                    // dispose();

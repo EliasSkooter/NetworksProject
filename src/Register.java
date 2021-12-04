@@ -17,7 +17,7 @@ public class Register extends JFrame{
     private JTextField tfUsername;
     private JLabel usernameLabel;
     private JLabel passwordLabel;
-    private JPasswordField passwordField1;
+    private JPasswordField tfPassword;
     private JCheckBox vaccinationCheck;
     private JLabel vaccinationFormLabel;
     private JButton VaccinationFormBtn;
@@ -25,8 +25,8 @@ public class Register extends JFrame{
     private JLabel FileSelectedLabel;
     private JButton signUpButton;
     private JButton cancelButton;
-    private File image;
-    private File vacCer;
+    private String image;
+    private String vacCer;
     public Client c = new Client();
 
     public Register() throws IOException {
@@ -52,7 +52,7 @@ public class Register extends JFrame{
 
                     int response = fileChooser.showOpenDialog(null); // select file to open
                     if (response== JFileChooser.APPROVE_OPTION){
-                        image = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                        image = fileChooser.getSelectedFile().getAbsolutePath();
                         ImageSelectedLabel.setText(fileChooser.getSelectedFile().getAbsolutePath());
                     }
                     else {
@@ -76,7 +76,7 @@ public class Register extends JFrame{
 
                     int response = fileChooser.showOpenDialog(null);// select file to open
                     if (response== JFileChooser.APPROVE_OPTION){
-                        vacCer = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                        vacCer = fileChooser.getSelectedFile().getAbsolutePath();
                         //System.out.println(fileSize);
                         FileSelectedLabel.setText(fileChooser.getSelectedFile().getAbsolutePath());
                     }
@@ -107,8 +107,20 @@ public class Register extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    System.out.println(image);
-                    c.sendFileToServer(image);
+                    System.out.println(vacCer);
+                    c.sendMessageToServer("reg");
+
+
+                    c.sendMessageToServer(tfName.getText());
+//                    c.sendImageToServer(image);
+                    c.sendMessageToServer(tfEmail.getText());
+                    c.sendMessageToServer(tfUsername.getText());
+                    c.sendMessageToServer(new String(tfPassword.getPassword()));
+                    c.getOutputToServer().writeBoolean(vaccinationCheck.isSelected());
+                    if(vaccinationCheck.isSelected()==true) {
+                        c.sendFileToServer(vacCer);
+                    }
+//                      c.sendImageToServer(image);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
