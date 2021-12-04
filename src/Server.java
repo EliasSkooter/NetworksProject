@@ -104,7 +104,7 @@ class ClientHandler extends Thread {
 
 
                         if (username.equals(received) && password.equals(recieve2)) {
-
+                            outputToClient.writeBoolean(true);
                             int id = rs.getInt("id");
                             String full_name = rs.getString("full_name");
                             String photo = rs.getString("photo");
@@ -115,7 +115,8 @@ class ClientHandler extends Thread {
                             //System.out.print(id + ", " + full_name + ", " + photo + ", " + email + ", " + username + ", " + vaccination);
                         }
                         else{
-                            System.out.println("authentication failed");
+                            outputToClient.writeBoolean(false);
+//                            System.out.println();
                         }
                     }
                     st.close();

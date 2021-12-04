@@ -24,15 +24,51 @@ public class Login extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
 
+                    if(tfUsername.getText().isEmpty()){
+                        JOptionPane.showMessageDialog(null,"Please Enter Your Username!");
+                    }
+                    else if(new String(tfPassword.getPassword()).isEmpty()){
+                        JOptionPane.showMessageDialog(null,"Please Enter Your Password!");
+                    }
+                    else {
+                        c.sendMessageToServer("log");
+                        c.sendMessageToServer(tfUsername.getText());
+                        c.sendMessageToServer(new String(tfPassword.getPassword()));
+                        boolean logInResponse = c.getInputFromServer().readBoolean();
+                        if (logInResponse == true){
+                            JOptionPane.showMessageDialog(null, "LogIn Successful \nWelcome "+tfUsername.getText());
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null, "Authentication Failed");
+                        }
 
-                    c.sendMessageToServer("log");
 
-                    c.sendMessageToServer(tfUsername.getText());
-                    c.sendMessageToServer(new String(tfPassword.getPassword()));
+
+
+                    }
                    // dispose();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+        RegisterBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    c.getSocket().close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+                Register re = null;
+                try {
+                    re = new Register();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                re.setVisible(true);
+                dispose();
             }
         });
     }

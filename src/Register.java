@@ -107,20 +107,61 @@ public class Register extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    c.sendMessageToServer("reg");
-                    c.sendMessageToServer(tfName.getText());
-                    c.sendFileToServer(image);
-                    c.sendMessageToServer(tfEmail.getText());
-                    c.sendMessageToServer(tfUsername.getText());
-                    c.sendMessageToServer(new String(tfPassword.getPassword()));
-                    c.getOutputToServer().writeBoolean(vaccinationCheck.isSelected());
-                    if(vaccinationCheck.isSelected()==true) {
-                        c.sendFileToServer(vacCer);
+                    if (tfName.getText().isEmpty()){
+                        JOptionPane.showMessageDialog(null, "Please Fill In Your Name!");
                     }
-//                      c.sendImageToServer(image);
+                    else if(image == null){
+                        JOptionPane.showMessageDialog(null, "Please Choose An Image!");
+                    }
+                    else if(tfEmail.getText().isEmpty()){
+                        JOptionPane.showMessageDialog(null, "Please Fill In Your Email!");
+                    }
+                    else if(tfUsername.getText().isEmpty()){
+                        JOptionPane.showMessageDialog(null, "Please Fill In a UserName!");
+                    }
+                    else if(new String(tfPassword.getPassword()).isEmpty()){
+                            JOptionPane.showMessageDialog(null, "Please Fill In a Password!");
+                    }
+                    else if(!tfName.getText().isEmpty() && !image.isEmpty() && !tfEmail.getText().isEmpty() && !tfUsername.getText().isEmpty() && !new String(tfPassword.getPassword()).isEmpty()) {
+
+                        c.sendMessageToServer("reg");
+                        c.sendMessageToServer(tfName.getText());
+                        c.sendFileToServer(image);
+                        c.sendMessageToServer(tfEmail.getText());
+                        c.sendMessageToServer(tfUsername.getText());
+                        c.sendMessageToServer(new String(tfPassword.getPassword()));
+                        c.getOutputToServer().writeBoolean(vaccinationCheck.isSelected());
+                        if (vaccinationCheck.isSelected() == true) {
+                            c.sendFileToServer(vacCer);
+                        }
+                        JOptionPane.showMessageDialog(null,"User Has Been Successfully Registered!");
+                        c.getSocket().close();
+                        Login li = new Login();
+                        li.setVisible(true);
+                        dispose();
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    c.getSocket().close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                Login li = null;
+                try {
+                    li = new Login();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                li.setVisible(true);
+                dispose();
             }
         });
     }
