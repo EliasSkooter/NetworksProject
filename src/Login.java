@@ -25,7 +25,7 @@ public class Login extends JFrame{
                 try {
 
 
-                   // c.sendMessageToServer("log");
+                    c.sendMessageToServer("log");
 
                     c.sendMessageToServer(tfUsername.getText());
                     c.sendMessageToServer(new String(tfPassword.getPassword()));

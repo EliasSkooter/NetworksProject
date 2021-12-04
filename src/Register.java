@@ -107,12 +107,9 @@ public class Register extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    System.out.println(vacCer);
                     c.sendMessageToServer("reg");
-
-
                     c.sendMessageToServer(tfName.getText());
-//                    c.sendImageToServer(image);
+                    c.sendFileToServer(image);
                     c.sendMessageToServer(tfEmail.getText());
                     c.sendMessageToServer(tfUsername.getText());
                     c.sendMessageToServer(new String(tfPassword.getPassword()));

@@ -64,8 +64,6 @@ class ClientHandler extends Thread {
     @Override
     public void run() {
         // Variables
-        String received;
-        String recieve2;
         String toreturn;
         while (true) {
             try {
@@ -73,34 +71,7 @@ class ClientHandler extends Thread {
 //                outputToClient.writeUTF("What do you want?[Date | Time]..\n" + "Type Exit to terminate connection.");
 
                 // Receive the answer from Client
-                received = inputFromClient.readUTF();
-                recieve2 = inputFromClient.readUTF();
 
-                String query = "SELECT * FROM users";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(query);
-                while (rs.next())
-                {
-                    String username = rs.getString("username");
-                    String password = rs.getString("password");
-
-
-                    if (username.equals(received) && password.equals(recieve2)) {
-
-                        int id = rs.getInt("id");
-                        String full_name = rs.getString("full_name");
-                        String photo = rs.getString("photo");
-                        String email = rs.getString("email");
-                        String vaccination = rs.getString("vaccination_status");
-                        System.out.println("Welcome: " + username);
-                        System.out.println("your vaccination status: " + vaccination);
-                        //System.out.print(id + ", " + full_name + ", " + photo + ", " + email + ", " + username + ", " + vaccination);
-                    }
-                    else{
-                        System.out.print("authentication failed");
-                    }
-                }
-                st.close();
 
 //                System.out.println(received);
 
@@ -108,18 +79,47 @@ class ClientHandler extends Thread {
 
 
                     System.out.println(inputFromClient.readUTF());
-//                    recieveImage();
+                    //you can sout the recieveFile method alone this gives the full path though
+                    System.out.println(receiveFile().getAbsolutePath());
                     System.out.println(inputFromClient.readUTF());
                     System.out.println(inputFromClient.readUTF());
                     System.out.println(inputFromClient.readUTF());
                     boolean vc = inputFromClient.readBoolean();
                     System.out.println(vc);
                     if(vc == true)
-                    receiveFile();
+                        System.out.println(receiveFile().getAbsolutePath());
                 }
                 else if (inputFromClient.readUTF().equals("log")){
-                    System.out.println(inputFromClient.readUTF());
-                    System.out.println(inputFromClient.readUTF());
+                    String received = inputFromClient.readUTF();
+                    String recieve2 = inputFromClient.readUTF();
+
+                    String query = "SELECT * FROM users";
+                    Statement st = conn.createStatement();
+                    ResultSet rs = st.executeQuery(query);
+                    while (rs.next())
+                    {
+                        String username = rs.getString("username");
+                        String password = rs.getString("password");
+
+
+                        if (username.equals(received) && password.equals(recieve2)) {
+
+                            int id = rs.getInt("id");
+                            String full_name = rs.getString("full_name");
+                            String photo = rs.getString("photo");
+                            String email = rs.getString("email");
+                            String vaccination = rs.getString("vaccination_status");
+                            System.out.println("Welcome: " + username);
+                            System.out.println("your vaccination status: " + vaccination);
+                            //System.out.print(id + ", " + full_name + ", " + photo + ", " + email + ", " + username + ", " + vaccination);
+                        }
+                        else{
+                            System.out.print("authentication failed");
+                        }
+                    }
+                    st.close();
+                    /*System.out.println(inputFromClient.readUTF());
+                    System.out.println(inputFromClient.readUTF());*/
                 }
                 // GET REQUEST ON localhost:6969/login
 
@@ -201,7 +201,8 @@ class ClientHandler extends Thread {
             e.printStackTrace();
         }
     }
-    public void receiveFile() {
+    public File receiveFile() {
+        File f = null;
         try {
             int bytesRead;
 
@@ -215,22 +216,15 @@ class ClientHandler extends Thread {
                 output.write(buffer, 0, bytesRead);
                 size -= bytesRead;
             }
-//            File f = new File(fileName);
-//            System.out.println(f.getAbsolutePath());
+            f = new File(fileName);
+
             output.close();
 //            clientData.close();
+//            System.out.println("File "+fileName+" received from client.");
 
-            System.out.println("File "+fileName+" received from client.");
         } catch (IOException ex) {
             System.err.println("Client error. Connection closed.");
         }
-    }
-    public void recieveImage() throws IOException {
-        InputStream clientData = new DataInputStream(clientSocket.getInputStream());
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(clientData);
-        BufferedImage bufferedImage = ImageIO.read(bufferedInputStream);
-//        bufferedInputStream.close();
-        File outputFile = new File("image.jpg");
-        ImageIO.write(bufferedImage, "jpg", outputFile);
+        return f;
     }
 }
