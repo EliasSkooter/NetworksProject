@@ -1,16 +1,17 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class User {
+public class User extends JFrame{
     private JPanel panel1;
     private JLabel pickATrustedUserLabel;
     private JLabel numOfActiveCasesLabel;
-    private JPanel RegisterPanel;
+    private JPanel userPanel;
     private JLabel addUserLabel;
     private JLabel statusLabel;
     private JLabel uploadPRCLabel;
     private JLabel locationLabel;
-    private JLabel ImageSelectedLabel;
-    private JLabel FileSelectedLabel;
     private JButton logOutButton;
     private JButton QueryActive;
     private JLabel valueActive;
@@ -23,10 +24,43 @@ public class User {
     private JLabel pcrUploadLabel;
     private JComboBox<String> dropdownLocations;
     private JButton submitLocation;
-    private String image;
-    private String vacCer;
+    private JLabel UserNameLabel;
+    private JLabel detailsLabel;
+    private JLabel detailsSubLabel;
+    private String pcr;
 
     public User() {
-        // firas continues...
+        setContentPane(userPanel);
+        setTitle("User");
+        setSize(600,500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
+        pcrUploadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == pcrUploadButton) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setAcceptAllFileFilterUsed(false);
+                    fileChooser.setDialogTitle("Select a PDF file");
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                            ".PDF", "pdf");
+                    fileChooser.addChoosableFileFilter(filter);
+
+                    int response = fileChooser.showOpenDialog(null);// select file to open
+                    if (response == JFileChooser.APPROVE_OPTION) {
+                        pcr = fileChooser.getSelectedFile().getAbsolutePath();
+                        //System.out.println(fileSize);
+                        pcrUploadLabel.setText(fileChooser.getSelectedFile().getAbsolutePath());
+                    } else {
+                        pcrUploadLabel.setText("the user cancelled the operation");
+                    }
+                }
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        User user = new User();
     }
 }
