@@ -11,19 +11,22 @@ public class User {
     private JLabel locationLabel;
     private JLabel ImageSelectedLabel;
     private JLabel FileSelectedLabel;
-    private JButton signUpButton;
-    private JButton cancelButton;
+    private JButton logOutButton;
     private JButton QueryActive;
     private JLabel valueActive;
-    private JComboBox listUsersTrusted;
-    private JComboBox ListUsersToTrust;
+    private JComboBox<String> listUsersTrusted;
+    private JComboBox<String> ListUsersToTrust;
     private JButton submitToTrust;
-    private JComboBox covidStatus;
+    private JComboBox<String> covidStatus;
     private JButton SubmitStatus;
     private JButton pcrUploadButton;
     private JLabel pcrUploadLabel;
-    private JComboBox dropdownLocations;
+    private JComboBox<String> dropdownLocations;
     private JButton submitLocation;
     private String image;
     private String vacCer;
+
+    public User() {
+        // firas continues...
+    }
 }
