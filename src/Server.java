@@ -79,16 +79,35 @@ class ClientHandler extends Thread {
                 if(clientInputType.equals("reg")) {
 
 
-                    System.out.println(inputFromClient.readUTF());
+                    //System.out.println(inputFromClient.readUTF());
+                    String receive_name = inputFromClient.readUTF();
                     //you can sout the recieveFile method alone this gives the full path though
-                    System.out.println(receiveFile().getAbsolutePath());
-                    System.out.println(inputFromClient.readUTF());
-                    System.out.println(inputFromClient.readUTF());
-                    System.out.println(inputFromClient.readUTF());
+                    //System.out.println(receiveFile().getAbsolutePath());
+                    String receive_file = receiveFile().getAbsolutePath();
+                    //System.out.println(inputFromClient.readUTF());
+                    String receive_email = inputFromClient.readUTF();
+                    //System.out.println(inputFromClient.readUTF());
+                    String receive_username = inputFromClient.readUTF();
+                    //System.out.println(inputFromClient.readUTF());
+                    String receive_password = inputFromClient.readUTF();
                     boolean vc = inputFromClient.readBoolean();
-                    System.out.println(vc);
-                    if(vc == true)
-                        System.out.println(receiveFile().getAbsolutePath());
+                    //System.out.println(vc);
+                    //if(vc == true)
+                        //System.out.println(receiveFile().getAbsolutePath());
+
+                    String query = "INSERT INTO users (full_name, photo, email, username, password, vaccination_status) "
+                            +" VALUES (?, ?, ?, ?, ?, ?)";
+                    File file = new File(receive_file);
+                    FileInputStream fileInputStream = new FileInputStream(file);
+
+                    PreparedStatement preparedStmt = conn.prepareStatement(query);
+                    preparedStmt.setString(1,receive_name);
+                    preparedStmt.setBinaryStream(2,fileInputStream);
+                    preparedStmt.setString(3,receive_email);
+                    preparedStmt.setString(4,receive_username);
+                    preparedStmt.setString(5,receive_password);
+                    preparedStmt.setBoolean(6,vc);
+                    preparedStmt.execute();
                 }
                 else if (clientInputType.equals("log")){
                     String received = inputFromClient.readUTF();
