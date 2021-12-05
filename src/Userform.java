@@ -7,35 +7,36 @@ import java.lang.String;
 public class Userform extends JFrame{
 
     private JPanel mainpanel;
-    private JButton quaryActiveCasesButton;
+    private JButton queryActiveCasesButton;
     private JButton viewListButton;
     private JComboBox comboBox1;
     private JButton addUserButton;
     private JButton submitUpdateButton;
     private JComboBox comboBox3;
-    private JButton browsDocumentsButton;
+    private JButton browseDocumentsButton;
     private JButton signOutButton;
-    private JButton submitListUpdateButton;
     private JTextField textField1;
     private JTextField textField2;
     private JButton checkButton;
     private JLabel pcrl;
     private JLabel selectedfile;
+    private JLabel welcomeUserLabel;
     private String wew;
     public Userform(){
       pcrl.setVisible(false);
-      browsDocumentsButton.setVisible(false);
-        selectedfile.setVisible(false);
-      setLocationRelativeTo(null);
-      setTitle("User Form");
-      setSize(631,419);
-      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      browseDocumentsButton.setVisible(false);
+      selectedfile.setVisible(false);
       setContentPane(mainpanel);
-      setResizable(false);
-        browsDocumentsButton.addActionListener(new ActionListener() {
+      setTitle("User Form");
+      setSize(700,419);
+      setLocationRelativeTo(null);
+      setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//      setResizable(false);
+      setVisible(true);
+        browseDocumentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == browsDocumentsButton){
+                if (e.getSource() == browseDocumentsButton){
                     JFileChooser fileChooser = new JFileChooser();
                     fileChooser.setAcceptAllFileFilterUsed(false);
                     fileChooser.setDialogTitle("Select a PDF file");
@@ -62,13 +63,15 @@ public class Userform extends JFrame{
         comboBox1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(comboBox1.) {
-                    browsDocumentsButton.setVisible(true);
+                if(((String)comboBox1.getSelectedItem()).equals("Contagious")) {
+                    browseDocumentsButton.setVisible(true);
                     pcrl.setVisible(true);
+                    selectedfile.setVisible(true);
                 }
                 else{
-                    browsDocumentsButton.setVisible(false);
+                    browseDocumentsButton.setVisible(false);
                     pcrl.setVisible(false);
+                    selectedfile.setVisible(false);
 
                 }
             }
@@ -79,8 +82,7 @@ public class Userform extends JFrame{
 
 
     public static void  main(String[] args){
-        JFrame frame = new Userform();
-        frame.setVisible(true);
+        Userform frame = new Userform();
 
 
     }
