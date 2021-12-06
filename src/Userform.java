@@ -17,7 +17,7 @@ public class Userform extends JFrame{
     private JButton browseDocumentsButton;
     private JButton signOutButton;
     private JTextField textField1;
-    private JTextField textField2;
+    private JTextField TfCheckTrusted;
     private JButton checkButton;
     private JLabel pcrl;
     private JLabel selectedfile;
@@ -121,8 +121,8 @@ public class Userform extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
                     c.sendMessageToServer("check_user_status");
-                    c.sendMessageToServer(textField2.getText());
-                    c.sendMessageToServer(user);
+                    c.sendMessageToServer(TfCheckTrusted.getText());
+//                    c.sendMessageToServer(user);
                     c.getOutputToServer().writeInt(id);
                     boolean status_response = c.getInputFromServer().readBoolean();
                     if (status_response == true){
@@ -142,7 +142,7 @@ public class Userform extends JFrame{
         addUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String txt = textField2.getText();
+                String txt = TfCheckTrusted.getText();
                 try {
                     c.sendMessageToServer("add_user_button");
                     c.sendMessageToServer(txt);

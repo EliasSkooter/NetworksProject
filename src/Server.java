@@ -170,44 +170,39 @@ class ClientHandler extends Thread {
                     System.out.println(inputFromClient.readUTF());*/
                 }
                 else if (clientInputType.equals("check_user_status")){
-                    String trusted_user = inputFromClient.readUTF();
+//                    String trusted_user = inputFromClient.readUTF();
                     String name = inputFromClient.readUTF();
                     int id = inputFromClient.readInt();
 
                     System.out.println(name);
                     String query2 = "SELECT status_condition FROM results where user_id = (SELECT truster_id FROM trust_table where truster_id = (SELECT id FROM users where Full_name = '"+ name + "') and trusted_id =" + id +")";
                     String query = "SELECT * FROM results where user_fullname = '" + name + "'";
+
+                    System.out.println("Query 2 =========> " + query2);
                     Statement st = conn.createStatement();
                     ResultSet rs = st.executeQuery(query2);
+                    if (rs.next() == true) {
                     String cond = rs.getString("status_condition");
                     System.out.println(cond);
-                    /*if (rs.next() == true) {
                         //while(rs.next()){
                         //String fullname = rs.getString("user_fullname");
-                        String trusted_friend = rs.getString("trusted_friends");
-                        boolean share = rs.getBoolean("share_status");
-
-                        if (fullname.equals(name) && trusted_friend.equals(trusted_user)) {
-                            String condition = rs.getString("status_condition");
-                            outputToClient.writeBoolean(true);
-                            System.out.println("Welcome: " + trusted_user);
-
-                            outputToClient.writeUTF(condition);
-                        } else {
-                            System.out.println("i am here");
-                            outputToClient.writeBoolean(false);
-                        }
+//                        String trusted_friend = rs.getString("trusted_friends");
+//                        boolean share = rs.getBoolean("share_status");
+                        outputToClient.writeBoolean(true);
+                        outputToClient.writeUTF(cond);
                     }
                     else {
                         outputToClient.writeBoolean(false);
                     }
                    // }
 
-                     */
+
                     st.close();
 
                 }
                 else if (clientInputType.equals("add_user_button")){
+
+//                    String addTrustedQuery = "INSERT into trust_table (truster_id, trusted_id) VALUES ("+ idofCurrentUser + ", "+ idofUserToTrust + ")";
 
                 }
                 // GET REQUEST ON localhost:6969/login
