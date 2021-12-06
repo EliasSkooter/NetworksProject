@@ -24,6 +24,8 @@ public class Register extends JFrame{
     private JLabel FileSelectedLabel;
     private JButton signUpButton;
     private JButton cancelButton;
+    private JLabel confirmPasswordLabel;
+    private JPasswordField tfConfirmPassword;
     private String image;
     private String vacCer;
     public Client c = new Client();
@@ -125,22 +127,26 @@ public class Register extends JFrame{
                         JOptionPane.showMessageDialog(null, "Please Choose Your Vaccination Certificate!");
                     }
                     else if(!tfName.getText().isEmpty() && !image.isEmpty() && !tfEmail.getText().isEmpty() && !tfUsername.getText().isEmpty() && !new String(tfPassword.getPassword()).isEmpty()) {
-
-                        c.sendMessageToServer("reg");
-                        c.sendMessageToServer(tfName.getText());
-                        c.sendFileToServer(image);
-                        c.sendMessageToServer(tfEmail.getText());
-                        c.sendMessageToServer(tfUsername.getText());
-                        c.sendMessageToServer(new String(tfPassword.getPassword()));
-                        c.getOutputToServer().writeBoolean(vaccinationCheck.isSelected());
-                        if (vaccinationCheck.isSelected() == true) {
-                            c.sendFileToServer(vacCer);
-                        }
-                        JOptionPane.showMessageDialog(null,"User Has Been Successfully Registered!");
-                        c.getSocket().close();
-                        Login li = new Login();
+                        if(new String(tfPassword.getPassword()).equals(new String(tfConfirmPassword.getPassword()))) {
+                            c.sendMessageToServer("reg");
+                            c.sendMessageToServer(tfName.getText());
+                            c.sendFileToServer(image);
+                            c.sendMessageToServer(tfEmail.getText());
+                            c.sendMessageToServer(tfUsername.getText());
+                            c.sendMessageToServer(new String(tfPassword.getPassword()));
+                            c.getOutputToServer().writeBoolean(vaccinationCheck.isSelected());
+                            if (vaccinationCheck.isSelected() == true) {
+                                c.sendFileToServer(vacCer);
+                            }
+                            JOptionPane.showMessageDialog(null, "User Has Been Successfully Registered!");
+                            c.getSocket().close();
+                            Login li = new Login();
 //                        li.setVisible(true);
-                        dispose();
+                            dispose();
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null, "Password and Confirm Password Do Not Match!");
+                        }
                     }
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -166,8 +172,5 @@ public class Register extends JFrame{
                 dispose();
             }
         });
-    }
-    public static void main(String[] args) throws IOException {
-        Register userRegister = new Register();
     }
 }

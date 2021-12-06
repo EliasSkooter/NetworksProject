@@ -94,25 +94,45 @@ class ClientHandler extends Thread {
                     String receive_file = null;
                     if (vc == true){
                         receive_file = receiveFile().getAbsolutePath();
+                        String query = "INSERT INTO users (full_name, photo, email, username, password, vaccination_status, vaccination_form) "
+                                +" VALUES (?, ?, ?, ?, ?, ?, ?)";
+                        File image_file = new File(receive_image);
+                        FileInputStream fileInputStream = new FileInputStream(image_file);
+
+                        File file2 = new File(receive_file);
+                        FileInputStream fileInputStream2 = new FileInputStream(file2);
+
+                        PreparedStatement preparedStmt = conn.prepareStatement(query);
+                        preparedStmt.setString(1,receive_name);
+                        preparedStmt.setBinaryStream(2,fileInputStream);
+                        preparedStmt.setString(3,receive_email);
+                        preparedStmt.setString(4,receive_username);
+                        preparedStmt.setString(5,receive_password);
+                        preparedStmt.setBoolean(6,vc);
+                        preparedStmt.setBinaryStream(7,fileInputStream2);
+                        preparedStmt.execute();
+                    }
+                    else{
+                        String query = "INSERT INTO users (full_name, photo, email, username, password, vaccination_status, vaccination_form) "
+                                +" VALUES (?, ?, ?, ?, ?, ?, ?)";
+                        File image_file = new File(receive_image);
+                        FileInputStream fileInputStream = new FileInputStream(image_file);
+
+//                        File file2 = new File(receive_file);
+//                        FileInputStream fileInputStream2 = new FileInputStream(file2);
+
+                        PreparedStatement preparedStmt = conn.prepareStatement(query);
+                        preparedStmt.setString(1,receive_name);
+                        preparedStmt.setBinaryStream(2,fileInputStream);
+                        preparedStmt.setString(3,receive_email);
+                        preparedStmt.setString(4,receive_username);
+                        preparedStmt.setString(5,receive_password);
+                        preparedStmt.setBoolean(6,vc);
+                        preparedStmt.setBinaryStream(7,null);
+                        preparedStmt.execute();
                     }
 
-                    String query = "INSERT INTO users (full_name, photo, email, username, password, vaccination_status, vaccination_form) "
-                            +" VALUES (?, ?, ?, ?, ?, ?, ?)";
-                    File image_file = new File(receive_image);
-                    FileInputStream fileInputStream = new FileInputStream(image_file);
 
-                    File file2 = new File(receive_file);
-                    FileInputStream fileInputStream2 = new FileInputStream(file2);
-
-                    PreparedStatement preparedStmt = conn.prepareStatement(query);
-                    preparedStmt.setString(1,receive_name);
-                    preparedStmt.setBinaryStream(2,fileInputStream);
-                    preparedStmt.setString(3,receive_email);
-                    preparedStmt.setString(4,receive_username);
-                    preparedStmt.setString(5,receive_password);
-                    preparedStmt.setBoolean(6,vc);
-                    preparedStmt.setBinaryStream(7,fileInputStream2);
-                    preparedStmt.execute();
                 }
                 else if (clientInputType.equals("log")){
                     String received = inputFromClient.readUTF();
