@@ -167,5 +167,7 @@ public class Register extends JFrame{
             }
         });
     }
-
+    public static void main(String[] args) throws IOException {
+        Register userRegister = new Register();
+    }
 }
