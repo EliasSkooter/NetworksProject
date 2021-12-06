@@ -202,8 +202,13 @@ class ClientHandler extends Thread {
                 }
                 else if (clientInputType.equals("add_user_button")){
 
-//                    String addTrustedQuery = "INSERT into trust_table (truster_id, trusted_id) VALUES ("+ idofCurrentUser + ", "+ idofUserToTrust + ")";
+                    String nameofUsertoTrust = inputFromClient.readUTF();
+                    int idofCurrentUser = inputFromClient.readInt();
 
+                    String addTrustedQuery = "INSERT into trust_table (truster_id, trusted_id) VALUES ("+ idofCurrentUser + ", (SELECT id FROM users WHERE full_name = '"+ nameofUsertoTrust + "'))";
+
+                    PreparedStatement preparedStmt = conn.prepareStatement(addTrustedQuery);
+                    preparedStmt.execute();
                 }
                 // GET REQUEST ON localhost:6969/login
 

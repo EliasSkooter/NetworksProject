@@ -16,7 +16,7 @@ public class Userform extends JFrame{
     private JComboBox comboBox3;
     private JButton browseDocumentsButton;
     private JButton signOutButton;
-    private JTextField textField1;
+    private JTextField TfaddUser;
     private JTextField TfCheckTrusted;
     private JButton checkButton;
     private JLabel pcrl;
@@ -142,10 +142,14 @@ public class Userform extends JFrame{
         addUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String txt = TfCheckTrusted.getText();
+                String persontoTrust = TfaddUser.getText();
                 try {
                     c.sendMessageToServer("add_user_button");
-                    c.sendMessageToServer(txt);
+                    c.sendMessageToServer(persontoTrust);
+                    c.getOutputToServer().writeInt(id);
+
+                    JOptionPane.showMessageDialog(null, "User has been added.");
+
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -164,6 +168,8 @@ public class Userform extends JFrame{
 
             }
         });
+
+
     }
 
 
