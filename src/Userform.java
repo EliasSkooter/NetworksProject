@@ -9,7 +9,6 @@ public class Userform extends JFrame{
     private String user;
     private JPanel mainpanel;
     private JButton queryActiveCasesButton;
-    private JButton viewListButton;
     private JComboBox comboBox1;
     private JButton addUserButton;
     private JButton submitUpdateButton;
@@ -23,6 +22,7 @@ public class Userform extends JFrame{
     private JLabel selectedfile;
     private JLabel welcomeUserLabel;
     private JButton Status_btn;
+    private JButton submitResultButton;
     //private JLabel numbertobeupdated;
     //private JLabel justlabel;
     private String wew;
@@ -73,8 +73,17 @@ public class Userform extends JFrame{
 
             }
         });
-
-
+        submitResultButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    c.sendMessageToServer("pcr");
+                    c.sendFileToServer(wew);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
         signOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

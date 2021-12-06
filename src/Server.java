@@ -221,6 +221,10 @@ class ClientHandler extends Thread {
 
 
                 }
+                else if (clientInputType.equals("pcr")){
+                    String receive_pcr = receiveFile().getAbsolutePath();
+                    System.out.println(receive_pcr);
+                }
                 // GET REQUEST ON localhost:6969/login
 
                 // Receiving Exit closes the connection and breaks the loop
