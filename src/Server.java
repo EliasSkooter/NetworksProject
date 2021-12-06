@@ -139,27 +139,31 @@ class ClientHandler extends Thread {
                     String query = "SELECT * FROM users where username = '" + received + "'";
                     Statement st = conn.createStatement();
                     ResultSet rs = st.executeQuery(query);
-                    while (rs.next())
-                    {
-                        String username = rs.getString("username");
-                        String password = rs.getString("password");
+                    if(rs.next() == true) {
+                        //while (rs.next()) {
+                            String username = rs.getString("username");
+                            String password = rs.getString("password");
 
-
-                        if (username.equals(received) && password.equals(received2)) {
-                            outputToClient.writeBoolean(true);
-                            int id = rs.getInt("id");
-                            String full_name = rs.getString("full_name");
-                            String photo = rs.getString("photo");
-                            String email = rs.getString("email");
-                            String vaccination = rs.getString("vaccination_status");
-                            System.out.println("Welcome: " + username);
-                            System.out.println("your vaccination status: " + vaccination);
-                            //System.out.print(id + ", " + full_name + ", " + photo + ", " + email + ", " + username + ", " + vaccination);
-                        }
-                        else{
-                            outputToClient.writeBoolean(false);
+                            if (username.equals(received) && password.equals(received2)) {
+                                outputToClient.writeBoolean(true);
+                                int id = rs.getInt("id");
+                                outputToClient.writeInt(id);
+                                String full_name = rs.getString("full_name");
+                                String photo = rs.getString("photo");
+                                String email = rs.getString("email");
+                                String vaccination = rs.getString("vaccination_status");
+                                System.out.println("Welcome: " + username);
+                                System.out.println("your vaccination status: " + vaccination);
+                                //System.out.print(id + ", " + full_name + ", " + photo + ", " + email + ", " + username + ", " + vaccination);
+                            } else {
+                                outputToClient.writeBoolean(false);
 //                            System.out.println();
+                            }
                         }
+                    //}
+                    else
+                    {
+                        outputToClient.writeBoolean(false);
                     }
                     st.close();
                     /*System.out.println(inputFromClient.readUTF());
@@ -168,30 +172,38 @@ class ClientHandler extends Thread {
                 else if (clientInputType.equals("check_user_status")){
                     String trusted_user = inputFromClient.readUTF();
                     String name = inputFromClient.readUTF();
+                    int id = inputFromClient.readInt();
 
                     System.out.println(name);
-
+                    String query2 = "SELECT status_condition FROM results where user_id = (SELECT truster_id FROM trust_table where truster_id = (SELECT id FROM users where Full_name = '"+ name + "') and trusted_id =" + id +")";
                     String query = "SELECT * FROM results where user_fullname = '" + name + "'";
                     Statement st = conn.createStatement();
-                    ResultSet rs = st.executeQuery(query);
-
-                    while(rs.next()){
-                        String fullname = rs.getString("user_fullname");
+                    ResultSet rs = st.executeQuery(query2);
+                    String cond = rs.getString("status_condition");
+                    System.out.println(cond);
+                    /*if (rs.next() == true) {
+                        //while(rs.next()){
+                        //String fullname = rs.getString("user_fullname");
                         String trusted_friend = rs.getString("trusted_friends");
                         boolean share = rs.getBoolean("share_status");
 
-                        if (fullname.equals(name) && trusted_friend.equals(trusted_user)){
+                        if (fullname.equals(name) && trusted_friend.equals(trusted_user)) {
                             String condition = rs.getString("status_condition");
                             outputToClient.writeBoolean(true);
                             System.out.println("Welcome: " + trusted_user);
 
                             outputToClient.writeUTF(condition);
-                        }
-                        else {
+                        } else {
                             System.out.println("i am here");
                             outputToClient.writeBoolean(false);
                         }
                     }
+                    else {
+                        outputToClient.writeBoolean(false);
+                    }
+                   // }
+
+                     */
                     st.close();
 
                 }

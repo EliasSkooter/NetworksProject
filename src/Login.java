@@ -35,8 +35,9 @@ public class Login extends JFrame{
                         c.sendMessageToServer(new String(tfPassword.getPassword()));
                         boolean logInResponse = c.getInputFromServer().readBoolean();
                         if (logInResponse == true){
+                            int id = c.getInputFromServer().readInt();
                             JOptionPane.showMessageDialog(null, "LogIn Successful \nWelcome "+tfUsername.getText());
-                            Userform userform = new Userform(tfUsername.getText());
+                            Userform userform = new Userform(tfUsername.getText(), id);
                             c.getSocket().close();
                             dispose();
                         }

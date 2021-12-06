@@ -26,8 +26,11 @@ public class Userform extends JFrame{
     private JLabel justlabel;
     private String wew;
     public Client c = new Client();
-    public Userform(String user) throws IOException {
+    private int id;
+    public Userform(String user, int id) throws IOException {
         this.user = user;
+        this.id = id;
+        System.out.println(id);
       pcrl.setVisible(false);
       browseDocumentsButton.setVisible(false);
       selectedfile.setVisible(false);
@@ -120,6 +123,7 @@ public class Userform extends JFrame{
                     c.sendMessageToServer("check_user_status");
                     c.sendMessageToServer(textField2.getText());
                     c.sendMessageToServer(user);
+                    c.getOutputToServer().writeInt(id);
                     boolean status_response = c.getInputFromServer().readBoolean();
                     if (status_response == true){
                         //user in the trusted list
