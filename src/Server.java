@@ -224,6 +224,14 @@ class ClientHandler extends Thread {
                 else if (clientInputType.equals("pcr")){
                     String receive_pcr = receiveFile().getAbsolutePath();
                     System.out.println(receive_pcr);
+                    int get_id = inputFromClient.readInt();
+                    File pcr_file = new File(receive_pcr);
+                    FileInputStream fileInputStream = new FileInputStream(pcr_file);
+                    String query = "update results set pcr_result = ? where user_id = ?";
+                    PreparedStatement preparedStmt = conn.prepareStatement(query);
+                    preparedStmt.setBinaryStream(1, fileInputStream);
+                    preparedStmt.setInt(2, get_id);
+                    preparedStmt.executeUpdate();
                 }
                 // GET REQUEST ON localhost:6969/login
 

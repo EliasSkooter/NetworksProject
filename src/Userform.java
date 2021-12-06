@@ -79,6 +79,7 @@ public class Userform extends JFrame{
                 try {
                     c.sendMessageToServer("pcr");
                     c.sendFileToServer(wew);
+                    c.getOutputToServer().writeInt(id);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
