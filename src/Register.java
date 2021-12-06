@@ -121,6 +121,9 @@ public class Register extends JFrame{
                     else if(new String(tfPassword.getPassword()).isEmpty()){
                             JOptionPane.showMessageDialog(null, "Please Fill In a Password!");
                     }
+                    else if(vaccinationCheck.isSelected() && vacCer==null){
+                        JOptionPane.showMessageDialog(null, "Please Choose Your Vaccination Certificate!");
+                    }
                     else if(!tfName.getText().isEmpty() && !image.isEmpty() && !tfEmail.getText().isEmpty() && !tfUsername.getText().isEmpty() && !new String(tfPassword.getPassword()).isEmpty()) {
 
                         c.sendMessageToServer("reg");
@@ -136,7 +139,7 @@ public class Register extends JFrame{
                         JOptionPane.showMessageDialog(null,"User Has Been Successfully Registered!");
                         c.getSocket().close();
                         Login li = new Login();
-                        li.setVisible(true);
+//                        li.setVisible(true);
                         dispose();
                     }
                 } catch (IOException ex) {
@@ -159,13 +162,10 @@ public class Register extends JFrame{
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                li.setVisible(true);
+//                li.setVisible(true);
                 dispose();
             }
         });
     }
-    public static void main(String[] args) throws IOException {
-        Register userRegister = new Register();
 
-    }
 }

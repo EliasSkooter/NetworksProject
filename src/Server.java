@@ -78,26 +78,24 @@ class ClientHandler extends Thread {
 
                 if(clientInputType.equals("reg")) {
 
-
-                    //System.out.println(inputFromClient.readUTF());
                     String receive_name = inputFromClient.readUTF();
-                    //you can sout the recieveFile method alone this gives the full path though
-                    //System.out.println(receiveFile().getAbsolutePath());
-                    String receive_file = receiveFile().getAbsolutePath();
-                    //System.out.println(inputFromClient.readUTF());
+                    System.out.println(receive_name);
+                    String receive_img = receiveFile().getAbsolutePath();
+                    System.out.println(receive_img);
                     String receive_email = inputFromClient.readUTF();
-                    //System.out.println(inputFromClient.readUTF());
+                    System.out.println(receive_email);
                     String receive_username = inputFromClient.readUTF();
-                    //System.out.println(inputFromClient.readUTF());
+                    System.out.println(receive_username);
                     String receive_password = inputFromClient.readUTF();
+                    System.out.println(receive_password);
                     boolean vc = inputFromClient.readBoolean();
                     //System.out.println(vc);
-                    //if(vc == true)
-                        //System.out.println(receiveFile().getAbsolutePath());
+                    if(vc == true)
+                        System.out.println(receiveFile().getAbsolutePath());
 
                     String query = "INSERT INTO users (full_name, photo, email, username, password, vaccination_status) "
                             +" VALUES (?, ?, ?, ?, ?, ?)";
-                    File file = new File(receive_file);
+                    File file = new File(receive_img);
                     FileInputStream fileInputStream = new FileInputStream(file);
 
                     PreparedStatement preparedStmt = conn.prepareStatement(query);

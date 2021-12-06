@@ -37,16 +37,14 @@ public class Login extends JFrame{
                         boolean logInResponse = c.getInputFromServer().readBoolean();
                         if (logInResponse == true){
                             JOptionPane.showMessageDialog(null, "LogIn Successful \nWelcome "+tfUsername.getText());
+                            Userform userform = new Userform(tfUsername.getText());
+                            c.getSocket().close();
+                            dispose();
                         }
                         else{
                             JOptionPane.showMessageDialog(null, "Authentication Failed");
                         }
-
-
-
-
                     }
-                   // dispose();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -67,7 +65,7 @@ public class Login extends JFrame{
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                re.setVisible(true);
+//                re.setVisible(true);
                 dispose();
             }
         });

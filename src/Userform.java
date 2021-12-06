@@ -2,10 +2,11 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.lang.String;
 
 public class Userform extends JFrame{
-
+    private String user;
     private JPanel mainpanel;
     private JButton queryActiveCasesButton;
     private JButton viewListButton;
@@ -22,12 +23,14 @@ public class Userform extends JFrame{
     private JLabel selectedfile;
     private JLabel welcomeUserLabel;
     private String wew;
-    public Userform(){
+    public Userform(String user){
+        this.user = user;
       pcrl.setVisible(false);
       browseDocumentsButton.setVisible(false);
       selectedfile.setVisible(false);
       setContentPane(mainpanel);
       setTitle("User Form");
+      welcomeUserLabel.setText("Welcome " + user);
       setSize(700,419);
       setLocationRelativeTo(null);
       setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -78,16 +81,25 @@ public class Userform extends JFrame{
         });
 
 
+        signOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Login login = new Login();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                //cut client connection code
+
+                dispose();
+
+            }
+        });
     }
 
-
-    public static void  main(String[] args){
-        Userform frame = new Userform();
-
-
-    }
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
     }
+
 }
