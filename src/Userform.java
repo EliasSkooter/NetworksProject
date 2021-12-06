@@ -23,8 +23,8 @@ public class Userform extends JFrame{
     private JLabel welcomeUserLabel;
     private JButton Status_btn;
     private JButton submitResultButton;
-    //private JLabel numbertobeupdated;
-    //private JLabel justlabel;
+    private JLabel numbertobeupdated;
+    private JLabel justlabel;
     private String wew;
     public Client c = new Client();
     private int id;
@@ -36,8 +36,8 @@ public class Userform extends JFrame{
       browseDocumentsButton.setVisible(false);
       selectedfile.setVisible(false);
 
-      //numbertobeupdated.setVisible(false);
-     // justlabel.setVisible(false);
+      numbertobeupdated.setVisible(false);
+      justlabel.setVisible(false);
       setContentPane(mainpanel);
       setTitle("User Form");
       welcomeUserLabel.setText("Welcome " + user);
@@ -105,7 +105,12 @@ public class Userform extends JFrame{
 
             }
         });
+        comboBox3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+            }
+        });
         checkButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -152,32 +157,14 @@ public class Userform extends JFrame{
             public void actionPerformed(ActionEvent e) {
                // c.sendFileToServer();
                // c.getInputFromServer();
-                try {
-                    c.sendMessageToServer("check_active_cases");
-                    int count = c.getInputFromServer().readInt();
-                    JOptionPane.showMessageDialog(null, "Total Number of Active Cases: "+count);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                numbertobeupdated.getText();
+                numbertobeupdated.setVisible(true);
+                justlabel.setVisible(true);
 
             }
         });
-        Status_btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String current_status = comboBox1.getSelectedItem().toString();
-                try {
-                    c.sendMessageToServer("current_status_condition");
-                    c.sendMessageToServer(current_status);
-                    c.getOutputToServer().writeInt(id);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                browseDocumentsButton.setVisible(true);
-                pcrl.setVisible(true);
-                selectedfile.setVisible(true);
-            }
-        });
+
+
     }
 
 
