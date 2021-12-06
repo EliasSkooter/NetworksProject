@@ -22,6 +22,8 @@ public class Userform extends JFrame{
     private JLabel pcrl;
     private JLabel selectedfile;
     private JLabel welcomeUserLabel;
+    private JLabel numbertobeupdated;
+    private JLabel justlabel;
     private String wew;
     public Client c = new Client();
     public Userform(String user) throws IOException {
@@ -140,6 +142,18 @@ public class Userform extends JFrame{
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+
+            }
+        });
+        //user presses the buttob to send request for server to send him how many cases are present now
+        queryActiveCasesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               // c.sendFileToServer();
+               // c.getInputFromServer();
+                numbertobeupdated.getText();
+                numbertobeupdated.setVisible(true);
+                justlabel.setVisible(true);
 
             }
         });
