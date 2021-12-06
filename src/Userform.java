@@ -31,6 +31,9 @@ public class Userform extends JFrame{
       pcrl.setVisible(false);
       browseDocumentsButton.setVisible(false);
       selectedfile.setVisible(false);
+
+      numbertobeupdated.setVisible(false);
+      justlabel.setVisible(false);
       setContentPane(mainpanel);
       setTitle("User Form");
       welcomeUserLabel.setText("Welcome " + user);
