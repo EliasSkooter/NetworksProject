@@ -23,8 +23,8 @@ public class Userform extends JFrame{
     private JLabel welcomeUserLabel;
     private JButton Status_btn;
     private JButton submitResultButton;
-    //private JLabel numbertobeupdated;
-    //private JLabel justlabel;
+    private JLabel numbertobeupdated;
+    private JLabel justlabel;
     private String wew;
     public Client c = new Client();
     private int id;
