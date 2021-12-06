@@ -170,35 +170,24 @@ class ClientHandler extends Thread {
                     System.out.println(inputFromClient.readUTF());*/
                 }
                 else if (clientInputType.equals("check_user_status")){
-//                    String trusted_user = inputFromClient.readUTF();
+
                     String name = inputFromClient.readUTF();
                     int id = inputFromClient.readInt();
-
-                    System.out.println(name);
+                    //System.out.println(name);
                     String query2 = "SELECT status_condition FROM results where user_id = (SELECT truster_id FROM trust_table where truster_id = (SELECT id FROM users where Full_name = '"+ name + "') and trusted_id =" + id +")";
-                    String query = "SELECT * FROM results where user_fullname = '" + name + "'";
-
-                    System.out.println("Query 2 =========> " + query2);
+                    //System.out.println("Query 2 =========> " + query2);
                     Statement st = conn.createStatement();
                     ResultSet rs = st.executeQuery(query2);
                     if (rs.next() == true) {
                     String cond = rs.getString("status_condition");
                     System.out.println(cond);
-                        //while(rs.next()){
-                        //String fullname = rs.getString("user_fullname");
-//                        String trusted_friend = rs.getString("trusted_friends");
-//                        boolean share = rs.getBoolean("share_status");
                         outputToClient.writeBoolean(true);
                         outputToClient.writeUTF(cond);
                     }
                     else {
                         outputToClient.writeBoolean(false);
                     }
-                   // }
-
-
                     st.close();
-
                 }
                 else if (clientInputType.equals("add_user_button")){
 
@@ -209,6 +198,28 @@ class ClientHandler extends Thread {
 
                     PreparedStatement preparedStmt = conn.prepareStatement(addTrustedQuery);
                     preparedStmt.execute();
+                }
+                else if (clientInputType.equals("check_active_cases")){
+                    String query = "select COUNT(status_condition) AS con_num FROM results WHERE (status_condition = 'Contagious');";
+
+                    Statement st = conn.createStatement();
+                    ResultSet rs = st.executeQuery(query);
+                    if(rs.next() == true) {
+                        int count = rs.getInt("con_num");
+                        System.out.println(count);
+                        outputToClient.writeInt(count);
+                    }
+
+                }else if (clientInputType.equals("current_status_condition")){
+                    String get_status = inputFromClient.readUTF();
+                    int get_id = inputFromClient.readInt();
+                    String query = "update results set status_condition = ? where user_id = ?";
+                    PreparedStatement preparedStmt = conn.prepareStatement(query);
+                    preparedStmt.setString(1, get_status);
+                    preparedStmt.setInt(2, get_id);
+                    preparedStmt.executeUpdate();
+
+
                 }
                 // GET REQUEST ON localhost:6969/login
 
