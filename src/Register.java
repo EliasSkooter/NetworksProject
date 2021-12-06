@@ -3,6 +3,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Register extends JFrame{
     private JPanel panel1;
@@ -108,6 +110,13 @@ public class Register extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    String regex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+//                    ^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$
+
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(tfEmail.getText());
+                    System.out.println(matcher.matches());
+
                     if (tfName.getText().isEmpty()){
                         JOptionPane.showMessageDialog(null, "Please Fill In Your Name!");
                     }
@@ -128,21 +137,26 @@ public class Register extends JFrame{
                     }
                     else if(!tfName.getText().isEmpty() && !image.isEmpty() && !tfEmail.getText().isEmpty() && !tfUsername.getText().isEmpty() && !new String(tfPassword.getPassword()).isEmpty()) {
                         if(new String(tfPassword.getPassword()).equals(new String(tfConfirmPassword.getPassword()))) {
-                            c.sendMessageToServer("reg");
-                            c.sendMessageToServer(tfName.getText());
-                            c.sendFileToServer(image);
-                            c.sendMessageToServer(tfEmail.getText());
-                            c.sendMessageToServer(tfUsername.getText());
-                            c.sendMessageToServer(new String(tfPassword.getPassword()));
-                            c.getOutputToServer().writeBoolean(vaccinationCheck.isSelected());
-                            if (vaccinationCheck.isSelected() == true) {
-                                c.sendFileToServer(vacCer);
-                            }
-                            JOptionPane.showMessageDialog(null, "User Has Been Successfully Registered!");
-                            c.getSocket().close();
-                            Login li = new Login();
+                            if(matcher.matches()) {
+                                c.sendMessageToServer("reg");
+                                c.sendMessageToServer(tfName.getText());
+                                c.sendFileToServer(image);
+                                c.sendMessageToServer(tfEmail.getText());
+                                c.sendMessageToServer(tfUsername.getText());
+                                c.sendMessageToServer(new String(tfPassword.getPassword()));
+                                c.getOutputToServer().writeBoolean(vaccinationCheck.isSelected());
+                                if (vaccinationCheck.isSelected() == true) {
+                                    c.sendFileToServer(vacCer);
+                                }
+                                JOptionPane.showMessageDialog(null, "User Has Been Successfully Registered!");
+//                                c.getSocket().close();
+//                                Login li = new Login();
 //                        li.setVisible(true);
-                            dispose();
+//                                dispose();
+                            }
+                            else {
+                                JOptionPane.showMessageDialog(null, "Please Enter a Valid Email");
+                            }
                         }
                         else{
                             JOptionPane.showMessageDialog(null, "Password and Confirm Password Do Not Match!");

@@ -136,7 +136,7 @@ class ClientHandler extends Thread {
                 }
                 else if (clientInputType.equals("log")){
                     String received = inputFromClient.readUTF();
-                    String recieve2 = inputFromClient.readUTF();
+                    String received2 = inputFromClient.readUTF();
 
                     String query = "SELECT * FROM users";
                     Statement st = conn.createStatement();
@@ -147,7 +147,7 @@ class ClientHandler extends Thread {
                         String password = rs.getString("password");
 
 
-                        if (username.equals(received) && password.equals(recieve2)) {
+                        if (username.equals(received) && password.equals(received2)) {
                             outputToClient.writeBoolean(true);
                             int id = rs.getInt("id");
                             String full_name = rs.getString("full_name");
