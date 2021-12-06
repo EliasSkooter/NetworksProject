@@ -23,7 +23,8 @@ public class Userform extends JFrame{
     private JLabel selectedfile;
     private JLabel welcomeUserLabel;
     private String wew;
-    public Userform(String user){
+    public Client c = new Client();
+    public Userform(String user) throws IOException {
         this.user = user;
       pcrl.setVisible(false);
       browseDocumentsButton.setVisible(false);
@@ -92,6 +93,53 @@ public class Userform extends JFrame{
                 //cut client connection code
 
                 dispose();
+
+            }
+        });
+        queryActiveCasesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        comboBox3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        checkButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    c.sendMessageToServer("check_user_status");
+                    c.sendMessageToServer(textField2.getText());
+                    c.sendMessageToServer(user);
+                    boolean status_response = c.getInputFromServer().readBoolean();
+                    if (status_response == true){
+                        //user in the trusted list
+                        String user_status = c.getInputFromServer().readUTF();
+                        JOptionPane.showMessageDialog(null, "user found, status: "+user_status);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "user does not want to share his status");
+                    }
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        addUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String txt = textField2.getText();
+                try {
+                    c.sendMessageToServer("add_user_button");
+                    c.sendMessageToServer(txt);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
 
             }
         });

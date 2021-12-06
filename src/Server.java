@@ -78,7 +78,6 @@ class ClientHandler extends Thread {
 
                 if(clientInputType.equals("reg")) {
 
-
                     //System.out.println(inputFromClient.readUTF());
                     String receive_name = inputFromClient.readUTF();
                     //you can sout the recieveFile method alone this gives the full path though
@@ -132,13 +131,12 @@ class ClientHandler extends Thread {
                         preparedStmt.execute();
                     }
 
-
                 }
                 else if (clientInputType.equals("log")){
                     String received = inputFromClient.readUTF();
                     String received2 = inputFromClient.readUTF();
 
-                    String query = "SELECT * FROM users";
+                    String query = "SELECT * FROM users where username = '" + received + "'";
                     Statement st = conn.createStatement();
                     ResultSet rs = st.executeQuery(query);
                     while (rs.next())
@@ -166,6 +164,39 @@ class ClientHandler extends Thread {
                     st.close();
                     /*System.out.println(inputFromClient.readUTF());
                     System.out.println(inputFromClient.readUTF());*/
+                }
+                else if (clientInputType.equals("check_user_status")){
+                    String trusted_user = inputFromClient.readUTF();
+                    String name = inputFromClient.readUTF();
+
+                    System.out.println(name);
+
+                    String query = "SELECT * FROM results where user_fullname = '" + name + "'";
+                    Statement st = conn.createStatement();
+                    ResultSet rs = st.executeQuery(query);
+
+                    while(rs.next()){
+                        String fullname = rs.getString("user_fullname");
+                        String trusted_friend = rs.getString("trusted_friends");
+                        boolean share = rs.getBoolean("share_status");
+
+                        if (fullname.equals(name) && trusted_friend.equals(trusted_user)){
+                            String condition = rs.getString("status_condition");
+                            outputToClient.writeBoolean(true);
+                            System.out.println("Welcome: " + trusted_user);
+
+                            outputToClient.writeUTF(condition);
+                        }
+                        else {
+                            System.out.println("i am here");
+                            outputToClient.writeBoolean(false);
+                        }
+                    }
+                    st.close();
+
+                }
+                else if (clientInputType.equals("add_user_button")){
+
                 }
                 // GET REQUEST ON localhost:6969/login
 

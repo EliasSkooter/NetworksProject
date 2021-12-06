@@ -23,7 +23,6 @@ public class Login extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-
                     if(tfUsername.getText().isEmpty()){
                         JOptionPane.showMessageDialog(null,"Please Enter Your Username!");
                     }
